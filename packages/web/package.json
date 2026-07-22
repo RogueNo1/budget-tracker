@@ -1,0 +1,25 @@
+{
+  "name": "@budget-tracker/web",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json && vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@budget-tracker/core": "*",
+    "chart.js": "^4.5.1"
+  },
+  "devDependencies": {
+    "fake-indexeddb": "^6.2.5",
+    "idb": "^8.0.3",
+    "jsdom": "^25.0.1",
+    "pdfjs-dist": "^3.11.174",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.0",
+    "vitest": "^2.1.9"
+  }
+}

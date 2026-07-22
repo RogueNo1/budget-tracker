@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ledger — Budget Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f0d;
+    --surface: #161714;
+    --surface2: #1e1f1c;
+    --surface3: #272824;
+    --border: #2e2f2b;
+    --accent: #c8f04a;
+    --accent2: #f0c84a;
+    --red: #f05a4a;
+    --green: #4af08a;
+    --muted: #6b6c67;
+    --text: #e8e9e4;
+    --text2: #b0b1ab;
+    --serif: 'Playfair Display', Georgia, serif;
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.35;
+  }
+
+  /* Header */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 40px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(14,15,13,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: var(--serif);
+    font-size: 22px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .upload-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #0e0f0d;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.15s;
+    letter-spacing: 0.03em;
+  }
+  .upload-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  #file-input { display: none; }
+
+  .account-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface2);
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  /* Main layout */
+  main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 40px 60px;
+  }
+
+  /* Empty state */
+  #empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 20px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 0.6s 0.1s forwards;
+  }
+
+  .empty-icon {
+    width: 80px; height: 80px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: var(--muted);
+    background: var(--surface);
+  }
+
+  #empty-state h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  #empty-state p { color: var(--muted); font-size: 14px; max-width: 320px; line-height: 1.6; }
+
+  .drop-zone {
+    border: 1.5px dashed var(--border);
+    border-radius: 12px;
+    padding: 32px 56px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    margin-top: 8px;
+  }
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color: var(--accent);
+    background: rgba(200,240,74,0.04);
+  }
+  .drop-zone span { color: var(--accent); font-family: var(--mono); font-size: 12px; }
+
+  /* Dashboard content */
+  #dashboard { display: none; }
+  #dashboard.visible { display: block; animation: fadeIn 0.5s forwards; }
+
+  @keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform:none; } }
+
+  /* Section header */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--text2);
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* KPI cards */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 20px 18px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+  }
+  .kpi-card:hover { border-color: var(--surface3); }
+  .kpi-card:nth-child(1) { animation-delay: 0.05s; }
+  .kpi-card:nth-child(2) { animation-delay: 0.1s; }
+  .kpi-card:nth-child(3) { animation-delay: 0.15s; }
+  .kpi-card:nth-child(4) { animation-delay: 0.2s; }
+  .kpi-card:nth-child(5) { animation-delay: 0.25s; }
+
+  .kpi-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .kpi-value {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .kpi-value.positive { color: var(--green); }
+  .kpi-value.negative { color: var(--red); }
+  .kpi-value.accent { color: var(--accent); }
+
+  .kpi-sub {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .kpi-accent-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--border);
+  }
+
+  .kpi-accent-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.8s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  /* Charts row */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    opacity: 0;
+    animation: fadeIn 0.5s 0.2s forwards;
+  }
+
+  .chart-card-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  /* Bar chart */
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 120px;
+  }
+
+  .bar-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  .bar-wrap {
+    width: 100%;
+    display: flex;
+    gap: 2px;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .bar {
+    flex: 1;
+    border-radius: 3px 3px 0 0;
+    min-height: 2px;
+    transition: height 0.8s cubic-bezier(0.16,1,0.3,1);
+    cursor: pointer;
+    position: relative;
+  }
+  .bar:hover::after {
+    content: attr(data-val);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface3);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-bottom: 4px;
+    pointer-events: none;
+    border: 1px solid var(--border);
+    z-index: 10;
+  }
+
+  .bar.income { background: var(--green); }
+  .bar.expense { background: var(--red); opacity: 0.85; }
+  .bar-label { font-family: var(--mono); font-size: 9px; color: var(--muted); }
+
+  /* Donut chart */
+  .donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .donut-svg { flex-shrink: 0; }
+
+  .donut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    overflow-y: auto;
+    max-height: 140px;
+  }
+
+  .donut-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .donut-item:hover { opacity: 0.75; }
+
+  .donut-dot {
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .donut-item-label {
+    font-size: 11px;
+    color: var(--text2);
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .donut-item-val {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* Balance line */
+  .balance-svg { width: 100%; height: 140px; }
+
+  /* Filters row */
+  .filters-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .filter-input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 13px;
+    padding: 8px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .filter-input:focus { border-color: var(--accent); }
+  .filter-input::placeholder { color: var(--muted); }
+
+  #search-input { width: 220px; }
+
+  select.filter-input {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236b6c67' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+  }
+
+  .filter-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(200,240,74,0.1);
+    border: 1px solid rgba(200,240,74,0.25);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .filter-tag:hover { background: rgba(200,240,74,0.15); }
+  .filter-tag.active { background: rgba(200,240,74,0.2); }
+
+  .results-count {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* Table */
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    padding: 12px 16px;
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+    transition: color 0.15s;
+  }
+
+  thead th:hover { color: var(--text); }
+
+  thead th.sorted { color: var(--accent); }
+
+  thead th .sort-icon {
+    display: inline-block;
+    margin-left: 4px;
+    opacity: 0.4;
+  }
+  thead th.sorted .sort-icon { opacity: 1; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+    cursor: pointer;
+    opacity: 0;
+    animation: rowIn 0.3s forwards;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+
+  @keyframes rowIn {
+    from { opacity: 0; transform: translateX(-4px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  td {
+    padding: 11px 16px;
+    font-size: 13px;
+    color: var(--text2);
+    vertical-align: middle;
+  }
+
+  .td-nr {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    width: 40px;
+  }
+
+  .td-date {
+    font-family: var(--mono);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .td-desc {
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--text);
+    font-size: 13px;
+  }
+
+  .td-category {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cat-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .cat-label {
+    font-size: 11px;
+    font-family: var(--mono);
+    white-space: nowrap;
+  }
+
+  .td-amount {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .td-amount.in { color: var(--green); }
+  .td-amount.out { color: var(--red); }
+  .td-amount.fee { color: var(--muted); }
+
+  .td-balance {
+    font-family: var(--mono);
+    font-size: 12px;
+    text-align: right;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .td-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-family: var(--mono);
+    font-size: 10px;
+    background: var(--surface3);
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  /* Pagination */
+  .pagination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+    justify-content: center;
+  }
+
+  .page-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .page-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .page-btn.active { background: var(--accent); color: #0e0f0d; border-color: var(--accent); font-weight: 500; }
+  .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px;
+    width: 420px;
+    max-width: 90vw;
+    transform: translateY(12px);
+    transition: transform 0.2s;
+  }
+  .modal-overlay.open .modal { transform: none; }
+
+  .modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .modal-title {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.3;
+    max-width: 300px;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+    line-height: 1;
+    transition: color 0.15s;
+  }
+  .modal-close:hover { color: var(--text); }
+
+  .modal-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-row:last-child { border-bottom: none; }
+
+  .modal-key {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .modal-val {
+    font-size: 13px;
+    color: var(--text);
+    text-align: right;
+    max-width: 240px;
+    word-break: break-word;
+  }
+
+  .modal-amount-in { color: var(--green); font-family: var(--mono); font-size: 18px; font-weight: 500; }
+  .modal-amount-out { color: var(--red); font-family: var(--mono); font-size: 18px; font-weight: 500; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+    .charts-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    header { padding: 16px 20px; }
+    main { padding: 20px 16px 40px; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .charts-grid { grid-template-columns: 1fr; }
+    td, th { padding: 10px 12px; }
+    .td-desc { max-width: 140px; }
+  }
+
+  /* Pending badge */
+  .pending-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+    margin-right: 5px;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="logo-dot"></span>
+    Ledger
+  </div>
+  <div class="header-right">
+    <span class="account-badge" id="account-label">No file loaded</span>
+    <button class="upload-btn" onclick="document.getElementById('file-input').click()">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/></svg>
+      Import CSV
+    </button>
+    <input type="file" id="file-input" accept=".csv" onchange="handleFileUpload(event)">
+  </div>
+</header>
+
+<main>
+  <!-- Empty state -->
+  <div id="empty-state">
+    <div class="empty-icon">⬡</div>
+    <h2>Your financial ledger</h2>
+    <p>Import a CSV export from your bank to view your full budget breakdown, spending insights, and transaction history.</p>
+    <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+      <span>Drop CSV file here or click to browse</span>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard">
+    <!-- KPI row -->
+    <div class="kpi-grid" id="kpi-grid"></div>
+
+    <!-- Charts -->
+    <div class="section-header">
+      <span class="section-title">Overview</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card" id="bar-chart-card">
+        <div class="chart-card-title">Income vs Expenses — Weekly</div>
+        <div class="bar-chart" id="bar-chart"></div>
+      </div>
+      <div class="chart-card" id="donut-card">
+        <div class="chart-card-title">Spending by Category</div>
+        <div class="donut-wrap">
+          <svg class="donut-svg" id="donut-svg" width="130" height="130" viewBox="0 0 130 130"></svg>
+          <div class="donut-legend" id="donut-legend"></div>
+        </div>
+      </div>
+      <div class="chart-card" id="balance-card">
+        <div class="chart-card-title">Balance Over Time</div>
+        <svg class="balance-svg" id="balance-svg" viewBox="0 0 400 140" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+
+    <!-- Transactions -->
+    <div class="section-header">
+      <span class="section-title">Transactions</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="filters-row">
+      <input type="text" class="filter-input" id="search-input" placeholder="Search description…" oninput="applyFilters()">
+      <select class="filter-input" id="category-filter" onchange="applyFilters()">
+        <option value="">All Categories</option>
+      </select>
+      <select class="filter-input" id="type-filter" onchange="applyFilters()">
+        <option value="">All Types</option>
+        <option value="in">Money In</option>
+        <option value="out">Money Out</option>
+      </select>
+      <select class="filter-input" id="sort-select" onchange="applyFilters()">
+        <option value="date-desc">Date: Newest</option>
+        <option value="date-asc">Date: Oldest</option>
+        <option value="amount-desc">Amount: High → Low</option>
+        <option value="amount-asc">Amount: Low → High</option>
+      </select>
+      <span class="results-count" id="results-count"></span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="td-nr">#</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th style="text-align:right">Money In</th>
+            <th style="text-align:right">Money Out</th>
+            <th style="text-align:right">Fee</th>
+            <th style="text-align:right">Balance</th>
+          </tr>
+        </thead>
+        <tbody id="transactions-body"></tbody>
+      </table>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title"></div>
+      <button class="modal-close" onclick="document.getElementById('modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+// ───────────────────────────────────────────────
+// State
+// ───────────────────────────────────────────────
+let allTxns = [];
+let filteredTxns = [];
+let currentPage = 1;
+const PAGE_SIZE = 20;
+
+const CATEGORY_COLORS = [
+  '#4af08a','#c8f04a','#f0c84a','#f05a4a','#4ab8f0',
+  '#c44af0','#f0844a','#4af0d8','#f04aac','#8af04a',
+  '#a04af0','#4a72f0','#f04a4a','#4af0b8','#e8f04a',
+];
+
+let catColorMap = {};
+
+// ───────────────────────────────────────────────
+// CSV Parsing
+// ───────────────────────────────────────────────
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.trim().replace(/"/g,''));
+  return lines.slice(1).map((line, i) => {
+    // Handle quoted commas
+    const cols = [];
+    let inQ = false, cur = '';
+    for (const ch of line) {
+      if (ch === '"') { inQ = !inQ; }
+      else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+      else { cur += ch; }
+    }
+    cols.push(cur.trim());
+    const row = {};
+    headers.forEach((h, idx) => { row[h] = cols[idx] || ''; });
+    return row;
+  }).filter(r => r['Nr']);
+}
+
+function normalise(rows) {
+  return rows.map(r => ({
+    nr: parseInt(r['Nr']) || 0,
+    account: r['Account'] || '',
+    postingDate: r['Posting Date'] || '',
+    transactionDate: r['Transaction Date'] || '',
+    description: r['Description'] || '',
+    originalDescription: r['Original Description'] || '',
+    parentCategory: r['Parent Category'] || 'Uncategorised',
+    category: r['Category'] || 'Uncategorised',
+    moneyIn: parseFloat(r['Money In']) || 0,
+    moneyOut: parseFloat(r['Money Out']) || 0,
+    fee: parseFloat(r['Fee']) || 0,
+    balance: parseFloat(r['Balance']) || null,
+    isPending: r['Description']?.toLowerCase().includes('pending'),
+  }));
+}
+
+// ───────────────────────────────────────────────
+// File Handling
+// ───────────────────────────────────────────────
+function handleFileUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => loadData(ev.target.result, file.name);
+  reader.readAsText(file);
+}
+
+// Drag & drop
+const dropZone = document.getElementById('drop-zone');
+document.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+document.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+document.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.name.endsWith('.csv')) {
+    const reader = new FileReader();
+    reader.onload = ev => loadData(ev.target.result, file.name);
+    reader.readAsText(file);
+  }
+});
+
+function loadData(text, filename) {
+  const rows = parseCSV(text);
+  allTxns = normalise(rows);
+
+  // Assign colours to categories
+  const cats = [...new Set(allTxns.map(t => t.category))];
+  cats.forEach((c, i) => { catColorMap[c] = CATEGORY_COLORS[i % CATEGORY_COLORS.length]; });
+
+  // Populate category filter
+  const sel = document.getElementById('category-filter');
+  sel.innerHTML = '<option value="">All Categories</option>';
+  cats.sort().forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c; opt.textContent = c;
+    sel.appendChild(opt);
+  });
+
+  // Account label
+  const acct = allTxns[0]?.account || '';
+  document.getElementById('account-label').textContent = acct ? `Acct ···${String(acct).slice(-4)}` : filename;
+
+  // Show dashboard
+  document.getElementById('empty-state').style.display = 'none';
+  const dash = document.getElementById('dashboard');
+  dash.classList.add('visible');
+
+  applyFilters();
+  renderKPIs();
+  renderCharts();
+}
+
+// ───────────────────────────────────────────────
+// Filters & Sort
+// ───────────────────────────────────────────────
+function applyFilters() {
+  const search = document.getElementById('search-input').value.toLowerCase();
+  const cat = document.getElementById('category-filter').value;
+  const type = document.getElementById('type-filter').value;
+  const sort = document.getElementById('sort-select').value;
+
+  filteredTxns = allTxns.filter(t => {
+    if (search && !t.description.toLowerCase().includes(search) && !t.category.toLowerCase().includes(search)) return false;
+    if (cat && t.category !== cat) return false;
+    if (type === 'in' && t.moneyIn <= 0) return false;
+    if (type === 'out' && t.moneyOut >= 0 && t.fee >= 0 && t.moneyIn > 0) return false;
+    if (type === 'out' && t.moneyIn > 0) return false;
+    return true;
+  });
+
+  filteredTxns.sort((a, b) => {
+    if (sort === 'date-desc') return new Date(b.postingDate) - new Date(a.postingDate) || b.nr - a.nr;
+    if (sort === 'date-asc') return new Date(a.postingDate) - new Date(b.postingDate) || a.nr - b.nr;
+    const aAmt = a.moneyIn || a.moneyOut || a.fee;
+    const bAmt = b.moneyIn || b.moneyOut || b.fee;
+    if (sort === 'amount-desc') return bAmt - aAmt;
+    if (sort === 'amount-asc') return aAmt - bAmt;
+    return 0;
+  });
+
+  document.getElementById('results-count').textContent = `${filteredTxns.length} transactions`;
+  currentPage = 1;
+  renderTable();
+  renderPagination();
+}
+
+// ───────────────────────────────────────────────
+// KPIs
+// ───────────────────────────────────────────────
+function fmt(n) {
+  if (n === null || isNaN(n)) return '—';
+  return new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR', maximumFractionDigits: 2 }).format(n);
+}
+
+function fmtShort(n) {
+  if (Math.abs(n) >= 1000) return 'R' + (n/1000).toFixed(1) + 'k';
+  return 'R' + n.toFixed(2);
+}
+
+function renderKPIs() {
+  const totalIn = allTxns.reduce((s, t) => s + t.moneyIn, 0);
+  const totalOut = allTxns.reduce((s, t) => s + Math.abs(t.moneyOut), 0);
+  const totalFees = allTxns.reduce((s, t) => s + Math.abs(t.fee), 0);
+  const net = totalIn - totalOut - totalFees;
+  const lastBalance = allTxns.filter(t => t.balance !== null).slice(-1)[0]?.balance ?? null;
+  const txnCount = allTxns.length;
+
+  const kpis = [
+    { label: 'Total Income', value: fmt(totalIn), cls: 'positive', sub: `${allTxns.filter(t=>t.moneyIn>0).length} payments in`, pct: 1 },
+    { label: 'Total Expenses', value: fmt(totalOut), cls: 'negative', sub: `excl. fees`, pct: totalOut / totalIn },
+    { label: 'Net Cash Flow', value: fmt(net), cls: net >= 0 ? 'positive' : 'negative', sub: net >= 0 ? 'Surplus' : 'Deficit', pct: Math.abs(net)/totalIn },
+    { label: 'Fees Paid', value: fmt(totalFees), cls: '', sub: `${allTxns.filter(t=>t.fee<0).length} fee transactions`, pct: totalFees/totalIn },
+    { label: 'Current Balance', value: lastBalance !== null ? fmt(lastBalance) : '—', cls: 'accent', sub: `${txnCount} total transactions`, pct: 1 },
+  ];
+
+  const grid = document.getElementById('kpi-grid');
+  grid.innerHTML = kpis.map(k => `
+    <div class="kpi-card">
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value ${k.cls}">${k.value}</div>
+      <div class="kpi-sub">${k.sub}</div>
+      <div class="kpi-accent-bar"><div class="kpi-accent-bar-fill" style="width:${Math.min(100,k.pct*100)}%"></div></div>
+    </div>
+  `).join('');
+}
+
+// ───────────────────────────────────────────────
+// Charts
+// ───────────────────────────────────────────────
+function renderCharts() {
+  renderBarChart();
+  renderDonut();
+  renderBalanceLine();
+}
+
+function getWeekKey(dateStr) {
+  const d = new Date(dateStr);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  const mon = new Date(d.setDate(diff));
+  return mon.toISOString().slice(0,10);
+}
+
+function renderBarChart() {
+  const weekMap = {};
+  allTxns.forEach(t => {
+    const wk = getWeekKey(t.postingDate);
+    if (!weekMap[wk]) weekMap[wk] = { in: 0, out: 0 };
+    weekMap[wk].in += t.moneyIn;
+    weekMap[wk].out += Math.abs(t.moneyOut) + Math.abs(t.fee);
+  });
+
+  const weeks = Object.keys(weekMap).sort().slice(-8);
+  const maxVal = Math.max(...weeks.map(w => Math.max(weekMap[w].in, weekMap[w].out)));
+
+  const container = document.getElementById('bar-chart');
+  container.innerHTML = weeks.map(wk => {
+    const d = weekMap[wk];
+    const inH = maxVal > 0 ? (d.in / maxVal * 100) : 0;
+    const outH = maxVal > 0 ? (d.out / maxVal * 100) : 0;
+    const label = wk.slice(5); // MM-DD
+    return `
+      <div class="bar-group">
+        <div class="bar-wrap">
+          <div class="bar income" style="height:${inH}%" data-val="${fmtShort(d.in)}"></div>
+          <div class="bar expense" style="height:${outH}%" data-val="-${fmtShort(d.out)}"></div>
+        </div>
+        <div class="bar-label">${label}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderDonut() {
+  const catTotals = {};
+  allTxns.forEach(t => {
+    if (t.moneyOut < 0) {
+      const key = t.category;
+      catTotals[key] = (catTotals[key] || 0) + Math.abs(t.moneyOut);
+    }
+  });
+
+  const sorted = Object.entries(catTotals).sort((a,b) => b[1]-a[1]);
+  const total = sorted.reduce((s,[,v]) => s+v, 0);
+  if (total === 0) return;
+
+  const cx = 65, cy = 65, r = 52, inner = 34;
+  let angle = -Math.PI / 2;
+  const svgEl = document.getElementById('donut-svg');
+  let paths = '';
+
+  sorted.forEach(([cat, val], i) => {
+    const slice = (val / total) * Math.PI * 2;
+    const x1 = cx + r * Math.cos(angle);
+    const y1 = cy + r * Math.sin(angle);
+    angle += slice;
+    const x2 = cx + r * Math.cos(angle);
+    const y2 = cy + r * Math.sin(angle);
+    const ix1 = cx + inner * Math.cos(angle - slice);
+    const iy1 = cy + inner * Math.sin(angle - slice);
+    const ix2 = cx + inner * Math.cos(angle);
+    const iy2 = cy + inner * Math.sin(angle);
+    const large = slice > Math.PI ? 1 : 0;
+    const color = catColorMap[cat] || '#666';
+    paths += `<path d="M${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} L${ix2},${iy2} A${inner},${inner} 0 ${large},0 ${ix1},${iy1} Z" fill="${color}" opacity="0.9">
+      <title>${cat}: ${fmtShort(val)}</title></path>`;
+  });
+
+  svgEl.innerHTML = paths + `<circle cx="${cx}" cy="${cy}" r="${inner-2}" fill="var(--surface)"/>
+    <text x="${cx}" y="${cy+4}" text-anchor="middle" font-family="DM Mono,monospace" font-size="12" fill="var(--text2)">${fmtShort(total)}</text>`;
+
+  const legend = document.getElementById('donut-legend');
+  legend.innerHTML = sorted.slice(0,8).map(([cat, val]) => `
+    <div class="donut-item">
+      <div class="donut-dot" style="background:${catColorMap[cat]}"></div>
+      <span class="donut-item-label">${cat}</span>
+      <span class="donut-item-val">${fmtShort(val)}</span>
+    </div>
+  `).join('');
+}
+
+function renderBalanceLine() {
+  const pts = allTxns.filter(t => t.balance !== null).map(t => ({
+    date: t.postingDate, balance: t.balance
+  }));
+  if (pts.length < 2) return;
+
+  const W = 400, H = 140, PAD = 20;
+  const minB = Math.min(...pts.map(p => p.balance));
+  const maxB = Math.max(...pts.map(p => p.balance));
+  const range = maxB - minB || 1;
+
+  const toX = i => PAD + (i / (pts.length - 1)) * (W - PAD * 2);
+  const toY = b => PAD + (1 - (b - minB) / range) * (H - PAD * 2);
+
+  const linePts = pts.map((p, i) => `${toX(i)},${toY(p.balance)}`).join(' ');
+  const areaFirst = `${toX(0)},${H}`;
+  const areaLast = `${toX(pts.length-1)},${H}`;
+  const areaPts = `${areaFirst} ${linePts} ${areaLast}`;
+
+  const svgEl = document.getElementById('balance-svg');
+  svgEl.innerHTML = `
+    <defs>
+      <linearGradient id="balGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <polygon points="${areaPts}" fill="url(#balGrad)"/>
+    <polyline points="${linePts}" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linejoin="round"/>
+    <text x="${PAD}" y="${H-4}" font-family="DM Mono,monospace" font-size="9" fill="var(--muted)">${fmtShort(minB)}</text>
+    <text x="${PAD}" y="${PAD+4}" font-family="DM Mono,monospace" font-size="9" fill="var(--muted)">${fmtShort(maxB)}</text>
+  `;
+}
+
+// ───────────────────────────────────────────────
+// Table
+// ───────────────────────────────────────────────
+function renderTable() {
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const slice = filteredTxns.slice(start, start + PAGE_SIZE);
+  const tbody = document.getElementById('transactions-body');
+
+  tbody.innerHTML = slice.map((t, idx) => {
+    const delay = Math.min(idx * 0.02, 0.3);
+    const color = catColorMap[t.category] || '#666';
+    const dateStr = t.postingDate;
+    const isPending = t.isPending;
+
+    const amtIn = t.moneyIn > 0 ? `<span class="td-amount in">+${fmt(t.moneyIn)}</span>` : `<span class="td-amount" style="color:var(--border)">—</span>`;
+    const amtOut = t.moneyOut < 0 ? `<span class="td-amount out">${fmt(t.moneyOut)}</span>` : `<span class="td-amount" style="color:var(--border)">—</span>`;
+    const feeStr = t.fee < 0 ? `<span class="td-amount fee">${fmt(t.fee)}</span>` : `<span class="td-amount" style="color:var(--border)">—</span>`;
+    const balStr = t.balance !== null ? `<span class="td-balance">${fmt(t.balance)}</span>` : `<span class="td-balance" style="color:var(--border)">—</span>`;
+
+    return `<tr style="animation-delay:${delay}s" onclick="openModal(${t.nr})">
+      <td class="td-nr">${t.nr}</td>
+      <td class="td-date">${isPending ? '<span class="pending-dot"></span>' : ''}${dateStr}</td>
+      <td class="td-desc" title="${t.description}">${t.description}</td>
+      <td><div class="td-category"><div class="cat-dot" style="background:${color}"></div><span class="cat-label">${t.category}</span></div></td>
+      <td>${amtIn}</td>
+      <td>${amtOut}</td>
+      <td>${feeStr}</td>
+      <td>${balStr}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderPagination() {
+  const total = Math.ceil(filteredTxns.length / PAGE_SIZE);
+  if (total <= 1) { document.getElementById('pagination').innerHTML = ''; return; }
+
+  let pages = [];
+  pages.push(`<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>←</button>`);
+
+  const range = [];
+  for (let i = 1; i <= total; i++) {
+    if (i === 1 || i === total || (i >= currentPage - 2 && i <= currentPage + 2)) range.push(i);
+    else if (range[range.length-1] !== '…') range.push('…');
+  }
+
+  range.forEach(p => {
+    if (p === '…') pages.push(`<span style="color:var(--muted);padding:0 4px">…</span>`);
+    else pages.push(`<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`);
+  });
+
+  pages.push(`<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===total?'disabled':''}>→</button>`);
+  document.getElementById('pagination').innerHTML = pages.join('');
+}
+
+function goPage(n) {
+  const total = Math.ceil(filteredTxns.length / PAGE_SIZE);
+  if (n < 1 || n > total) return;
+  currentPage = n;
+  renderTable();
+  renderPagination();
+  document.querySelector('.table-wrap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ───────────────────────────────────────────────
+// Modal
+// ───────────────────────────────────────────────
+function openModal(nr) {
+  const t = allTxns.find(x => x.nr === nr);
+  if (!t) return;
+
+  document.getElementById('modal-title').textContent = t.description;
+
+  const amtHtml = t.moneyIn > 0
+    ? `<span class="modal-amount-in">+${fmt(t.moneyIn)}</span>`
+    : `<span class="modal-amount-out">${fmt(t.moneyOut)}</span>`;
+
+  const rows = [
+    ['Amount', amtHtml],
+    ['Date', t.postingDate],
+    ['Transaction Time', t.transactionDate],
+    ['Category', `<span style="color:${catColorMap[t.category] || '#999'}">${t.category}</span>`],
+    ['Parent Category', t.parentCategory],
+    ['Fee', t.fee < 0 ? fmt(t.fee) : '—'],
+    ['Balance After', t.balance !== null ? fmt(t.balance) : '—'],
+    ['Account', t.account],
+    ['Reference #', t.nr],
+  ];
+
+  document.getElementById('modal-body').innerHTML = rows.map(([k,v]) => `
+    <div class="modal-row">
+      <span class="modal-key">${k}</span>
+      <span class="modal-val">${v}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('modal-overlay').classList.remove('open');
+});
+</script>
+</body>
+</html>
