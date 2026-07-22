@@ -1,0 +1,106 @@
+Nr,Account,Posting Date,Transaction Date,Description,Original Description,Parent Category,Category,Money In,Money Out,Fee,Balance
+1,2009932044,2026-02-01,2026-02-01 2:51,Live Better Interest Sweep,LB Interest Sweep Payments | JAN 2026,Transfer,Transfer,,-1.02,,383.2
+2,2009932044,2026-02-01,2026-01-30 13:10,Varsitycafe Potchefstroom (Card 3221),VARSITYCAFE            POTCHEFSTROOMZAZA,Food,Takeaways,,-48,,335.2
+3,2009932044,2026-02-02,2026-01-31 8:36,Varsmark Potchefstroom (Card 3221),VARSMARK               POTCHEFSTROOMZAZA,Food,Groceries,,-110,,225.2
+4,2009932044,2026-02-02,2026-02-02 11:34,Banking App Transfer from Live Better Savings Account (2010584372),Banking App Transfer from Live Better Savings Account (2010584372),Transfer,Transfer,2.06,,,227.26
+5,2009932044,2026-02-02,2026-02-02 11:34,Banking App Transfer Received from Lts Funds: Transfer,Transfer,Transfer,Transfer,3.65,,,230.91
+6,2009932044,2026-02-03,2026-02-03 15:54,Payment Received: H Rootman,H ROOTMAN,Other Income,Other Income,500,,,730.91
+7,2009932044,2026-02-03,2026-02-03 21:16,Banking App Immediate Payment: N Pienaar,N PIENAAR,Personal & Family,Digital Payments,,-42,,688.91
+8,2009932044,2026-02-03,2026-02-03 21:16,Immediate Payment Fee,Immediate Payment Fee,Fees,Fees,,,-1,687.91
+9,2009932044,2026-02-04,2026-01-31 12:07,Checkers Potchefstroom (Card 3221),Checkers Fresh X Mooi  POTCHEFSTROOM  ZA,Food,Groceries,,-189.26,,498.65
+10,2009932044,2026-02-05,2026-02-05 6:37,Live Better Round-up Transfer,Round-up Transfer,Transfer,Transfer,,-0.74,,497.91
+11,2009932044,2026-02-05,2026-02-05 13:19,Banking App Immediate Payment: Jabulani,JABULANI,Personal & Family,Digital Payments,,-50,,447.91
+12,2009932044,2026-02-05,2026-02-05 13:19,Immediate Payment Fee,Immediate Payment Fee,Fees,Fees,,,-1,446.91
+13,2009932044,2026-02-08,2026-02-06 15:50,Superspar Potchefstroom (Card 3221),SuperSpar Potchefstroo Potchefstroom  ZA,Food,Groceries,,-84.24,,362.67
+14,2009932044,2026-02-08,2026-02-06 9:55,Smpstationers Potchefstroom (Card 3221),SMPSTATIONERS          POTCHEFSTROOMZAZA,Education,Education,,-21,,341.67
+15,2009932044,2026-02-09,2026-02-09 4:53,Live Better Round-up Transfer,Round-up Transfer,Transfer,Transfer,,-2.76,,338.91
+16,2009932044,2026-02-09,2026-02-09 9:47,SWIFT Payment Received: Zz2wise Transfer -wr/ultd/an Za,ZZ2Wise Transfer -WR/ULTD/an ZA,Other Income,Other Income,7666.8,,,8005.71
+17,2009932044,2026-02-09,2026-02-09 9:47,International Deposit Fee (Forex),International Deposit Fee (Forex),Fees,Fees,,,-50,7955.71
+18,2009932044,2026-02-09,2026-02-09 9:56,Banking App Immediate Payment: Hesmari,HESMARI,Personal & Family,Digital Payments,,-500,,7455.71
+19,2009932044,2026-02-09,2026-02-09 9:56,Immediate Payment Fee,Immediate Payment Fee,Fees,Fees,,,-1,7454.71
+20,2009932044,2026-02-09,2026-02-09 15:58,Banking App Immediate Payment: Heidi Rootman,HEIDI ROOTMAN,Personal & Family,Digital Payments,,-7100,,354.71
+21,2009932044,2026-02-09,2026-02-09 15:58,Immediate Payment Fee,Immediate Payment Fee,Fees,Fees,,,-1,353.71
+22,2009932044,2026-02-09,2026-02-09 15:58,SMS Payment Notification Fee,SMS Payment Notification Fee,Fees,Fees,,,-0.35,353.36
+23,2009932044,2026-02-10,2026-02-10 16:05,PayShap Payment Received: Ma,MA,Loans,Loans,2000,,,2353.36
+24,2009932044,2026-02-11,2026-02-08 14:34,Checkers Potchefstroom (Card 3221),Checkers Potchefstroom POTCHEFSTROOM  ZA,Food,Groceries,,-121.08,,2232.28
+25,2009932044,2026-02-12,2026-02-12 9:01,Live Better Round-up Transfer,Round-up Transfer,Transfer,Transfer,,-0.92,,2231.36
+26,2009932044,2026-02-13,2026-02-13 9:12,SWIFT Payment Received: Zz2wise Transfer -wr/ultd/an Za,ZZ2Wise Transfer -WR/ULTD/an ZA,Other Income,Other Income,2807.44,,,5038.8
+27,2009932044,2026-02-13,2026-02-13 9:12,International Deposit Fee (Forex),International Deposit Fee (Forex),Fees,Fees,,,-50,4988.8
+28,2009932044,2026-02-13,2026-02-13 10:39,Banking App Transfer to Lts Funds: Transfer,Transfer,Transfer,Transfer,,-4750,,238.8
+29,2009932044,2026-02-14,2026-02-14 8:29,PayShap Payment Received: Ma,MA,Loans,Loans,2900,,,3138.8
+30,2009932044,2026-02-14,2026-02-14 8:46,Payment Received: Food,FOOD,Allowance,Allowance,200,,,3338.8
+31,2009932044,2026-02-14,2026-02-14 16:12,Banking App Transfer to Lts Funds: Transfer,Transfer,Transfer,Transfer,,-2700,,638.8
+32,2009932044,2026-02-14,2026-02-14 18:57,Banking App Immediate Payment: Hesmari,HESMARI,Personal & Family,Digital Payments,,-200,,438.8
+33,2009932044,2026-02-14,2026-02-14 18:57,Immediate Payment Fee,Immediate Payment Fee,Fees,Fees,,,-1,437.8
+34,2009932044,2026-02-15,2026-02-13 10:48,Superspar Upington (Card 3221),SuperSpar Kalahari 2   UPINGTON     WCZA,Food,Groceries,,-35,,402.8
+35,2009932044,2026-02-15,2026-02-15 12:50,PayShap Payment Received: David Vd Merwe,DAVID VD MERWE,Other Income,Other Income,2000,,,2402.8
+36,2009932044,2026-02-15,2026-02-15 14:29,Banking App Transfer to Lts Funds: Transfer,Transfer,Transfer,Transfer,,-1100,,1302.8
+37,2009932044,2026-02-15,2026-02-15 14:29,Banking App Transfer to Lts Funds: Transfer,Transfer,Transfer,Transfer,,-25,,1277.8
+38,2009932044,2026-02-16,2026-02-16 2:12,Set-off Applied,INTERNAL TRANSFER,Transfer,Transfer,,-6,,1271.8
+39,2009932044,2026-02-16,2026-02-14 16:48,Conzalez Sweets Upington (Card 3221),CONZALEZ SWEETS        UPINGTON     ZAZA,Food,Groceries,,-55.5,,1216.3
+40,2009932044,2026-02-16,2026-02-16 5:50,Live Better Round-up Transfer,Round-up Transfer,Transfer,Transfer,,-1,,1215.3
+41,2009932044,2026-02-16,2026-02-16 12:34,Payment Received: D Rootman Transfer 2979660523,D Rootman                     TRANSFER  2979660523,Other Income,Other Income,450,,,1665.3
+42,2009932044,2026-02-17,2026-02-17 7:20,Banking App Transfer to Tithe: Transfer,Transfer,Transfer,Transfer,,-245,,1420.3
+43,2009932044,2026-02-17,2026-02-17 7:21,Banking App Transfer to Colonel: Transfer,Transfer,Transfer,Transfer,,-1105,,315.3
+44,2009932044,2026-02-17,2026-02-17 9:23,Live Better Round-up Transfer,Round-up Transfer,Transfer,Transfer,,-0.5,,314.8
+45,2009932044,2026-02-17,2026-02-17 11:39,PayShap Payment Received: Ma,MA,Loans,Loans,500,,,814.8
+46,2009932044,2026-02-18,2026-02-14 16:42,Ten Pin Bowling Upington (Card 3221),TEN PIN BOWLING        UPINGTON       ZA,Entertainment,Going Out,,-50,,764.8
+47,2009932044,2026-02-18,2026-02-15 14:35,KFC Northern Cape (Card 3221),KFC Tradeon Kathu 2    Northern CapeZAZA,Food,Takeaways,,-42.9,,721.9
+48,2009932044,2026-02-18,2026-02-16 11:49,Varsitycafe Potchefstroom (Card 3221),VARSITYCAFE            POTCHEFSTROOMZAZA,Food,Takeaways,,-20,,701.9
+49,2009932044,2026-02-19,2026-02-17 13:25,Superspar Potchefstroom (Card 3221),SuperSpar Potchefstroo Potchefstroom  ZA,Food,Groceries,,-143.21,,558.69
+50,2009932044,2026-02-19,2026-02-19 7:44,Live Better Round-up Transfer,Round-up Transfer,Transfer,Transfer,,-1.1,,557.59
+51,2009932044,2026-02-20,2026-02-20 1:42,Live Better Round-up Transfer,Round-up Transfer,Transfer,Transfer,,-0.79,,556.8
+52,2009932044,2026-02-20,2026-02-18 16:04,Superspar Potchefstroom (Card 3221),SuperSpar Potchefstroo Potchefstroom  ZA,Food,Groceries,,-29.99,,526.81
+53,2009932044,2026-02-20,2026-02-18 13:17,Superspar Potchefstroom (Card 3221),SuperSpar Potchefstroo Potchefstroom  ZA,Food,Groceries,,-59.8,,467.01
+54,2009932044,2026-02-21,2026-02-21 1:41,Live Better Round-up Transfer,Round-up Transfer,Transfer,Transfer,,-0.21,,466.8
+55,2009932044,2026-02-21,2026-02-21 12:23,Cashback Insufficient Funds Fee: Checkers Potchefstroom Sb050518 Za,INSF. FUNDS |          Checkers Potchefstroom SB050518       ZA,Fees,Fees,,,-1,465.8
+56,2009932044,2026-02-23,2026-02-21 8:06,Varsmark Potchefstroom (Card 3221),VARSMARK               POTCHEFSTROOMZAZA,Food,Groceries,,-40.26,,425.54
+57,2009932044,2026-02-23,2026-02-21 12:24,Cash Withdrawal: Checkers Potchefstroom Potchefstroom Za,Checkers Potchefstroom POTCHEFSTROOM  ZA,Cash,Cash Withdrawal,,-80,,345.54
+58,2009932044,2026-02-23,2026-02-23 1:47,Till Cash Withdrawal Fee,Till Cash Withdrawal Fee,Fees,Fees,,,-2,343.54
+59,2009932044,2026-02-23,2026-02-21 7:44,Varsmark Potchefstroom (Card 3221),VARSMARK               POTCHEFSTROOMZAZA,Food,Groceries,,-66.56,,276.98
+60,2009932044,2026-02-23,2026-02-21 12:22,Checkers Potchefstroom (Card 3221),Checkers Potchefstroom POTCHEFSTROOM  ZA,Food,Groceries,,-145.05,,131.93
+61,2009932044,2026-02-23,2026-02-21 7:49,New Heights He Parys (Card 3221),Yoco   *New Heights He Parys        FSZA,Food,Groceries,,-100,,31.93
+62,2009932044,2026-02-23,2026-02-23 8:41,Payment Received: H Rootman,H ROOTMAN,Other Income,Other Income,300,,,331.93
+63,2009932044,2026-02-24,2026-02-24 1:06,Live Better Round-up Transfer,Round-up Transfer,Transfer,Transfer,,-4.13,,327.8
+64,2009932044,2026-02-25,2026-02-23 9:42,Varsitycafe Potchefstroom (Card 3221),VARSITYCAFE            POTCHEFSTROOMZAZA,Food,Takeaways,,-26,,301.8
+65,2009932044,2026-02-25,2026-02-25 20:07,Payment Received: N Pienaar,N PIENAAR,Other Income,Other Income,500,,,801.8
+66,2009932044,2026-02-27,2026-02-26 22:24,Banking App Transfer to Colonel: Transfer,Transfer,Transfer,Transfer,,-450,,351.8
+67,2009932044,2026-02-27,2026-02-26 22:24,Banking App Transfer to Tithe: Transfer,Transfer,Transfer,Transfer,,-50,,301.8
+68,2009932044,2026-02-27,2026-02-27 7:20,Banking App Transfer Received from Tithe: Transfer,Transfer,Transfer,Transfer,48.5,,,350.3
+69,2009932044,2026-02-27,2026-02-27 7:21,Banking App Transfer to Tithe: Transfer,Transfer,Transfer,Transfer,,-0.1,,350.2
+70,2009932044,2026-02-28,2026-02-28 13:08,Banking App Transfer Received from Colonel: Transfer,Transfer,Transfer,Transfer,69,,,419.2
+71,2009932044,2026-02-28,2026-03-01 0:47,Interest Received,Interest Received,Interest,Interest,1.14,,,420.34
+72,2009932044,2026-02-28,2026-03-01 0:47,Monthly Account Admin Fee,Monthly Account Admin Fee,Fees,Fees,,,-7.5,412.84
+73,2009932044,2026-03-01,2026-03-01 9:26,Live Better Interest Sweep,LB Interest Sweep Payments | FEB 2026,Transfer,Transfer,,-1.14,,411.7
+74,2009932044,2026-03-01,2026-02-27 13:04,Unite180 Npc Pretoria (Card 3221),Yoco   *Unite180 NPC   Pretoria     GPZA,Food,Takeaways,,-69,,342.7
+75,2009932044,2026-03-01,2026-02-27 7:13,Toro Nations Potchefstroom (Card 3221),Yoco   *Toro Nations   PotchefstroomNWZA,Food,Restaurants,,-48.4,,294.3
+76,2009932044,2026-03-01,2026-03-01 14:45,Payment Received: H Rootman,H ROOTMAN,Other Income,Other Income,460,,,754.3
+77,2009932044,2026-03-02,2026-03-02 9:10,Banking App Transfer to Tithe: Transfer,Transfer,Transfer,Transfer,,-30,,724.3
+78,2009932044,2026-03-02,2026-03-02 9:10,Banking App Transfer to Colonel: Transfer,Transfer,Transfer,Transfer,,-270,,454.3
+79,2009932044,2026-03-02,2026-03-02 10:04,Banking App Immediate Payment: Miss Chane Pien,MISS CHANE PIEN,Personal & Family,Digital Payments,,-250,,204.3
+80,2009932044,2026-03-02,2026-03-02 10:04,Immediate Payment Fee,Immediate Payment Fee,Fees,Fees,,,-1,203.3
+81,2009932044,2026-03-02,2026-03-02 15:49,Live Better Round-up Transfer,Round-up Transfer,Transfer,Transfer,,-2.6,,200.7
+82,2009932044,2026-03-04,2026-03-02 9:18,Superspar Potchefstroom (Card 3221),SuperSpar Potchefstroo Potchefstroom  ZA,Food,Groceries,,-29.99,,170.71
+83,2009932044,2026-03-04,2026-03-04 12:34,Payment Received: Daniel Rootman Transfer 3027001516,Daniel Rootman                TRANSFER  3027001516,Other Income,Other Income,478,,,648.71
+84,2009932044,2026-03-04,2026-03-04 13:52,Banking App Transfer to Tithe: Transfer,Transfer,Transfer,Transfer,,-47.8,,600.91
+85,2009932044,2026-03-04,2026-03-04 13:53,Banking App Transfer to Colonel: Transfer Transfer,Transfer Transfer,Transfer,Transfer,,-430,,170.91
+86,2009932044,2026-03-05,2026-03-05 12:18,Live Better Round-up Transfer,Round-up Transfer,Transfer,Transfer,,-0.01,,170.9
+87,2009932044,2026-03-07,2026-03-07 10:13,Flourish 183569 Potchefstroo (Card 3221),000      FLOURISH         183569POTCHEFSTROO NWZA,Uncategorised,Uncategorised,,-100,,70.9
+88,2009932044,2026-03-07,2026-03-07 10:27,Banking App Transfer Received from Colonel: Transfer Date,Transfer Date,Transfer,Transfer,1000,,,1070.9
+89,2009932044,2026-03-08,2026-03-07 23:58,Banking App Transfer to Colonel: Transfer Transfer,Transfer Transfer,Transfer,Transfer,,-100,,970.9
+90,2009932044,2026-03-08,2026-03-08 12:26,Payment Received: H Rootman,H ROOTMAN,Other Income,Other Income,300,,,1270.9
+91,2009932044,2026-03-09,2026-03-07 13:10,Olive Branch C Potchefstroom (Card 3221),Yoco   *Olive Branch C PotchefstroomNWZA,Food,Restaurants,,-800.2,,470.7
+92,2009932044,2026-03-10,2026-03-08 15:49,Checkers Potchefstroom (Card 3221),Checkers Fresh X Mooi  POTCHEFSTROOM  ZA,Food,Groceries,,-89.97,,380.73
+93,2009932044,2026-03-10,2026-03-10 11:32,Live Better Round-up Transfer,Round-up Transfer,Transfer,Transfer,,-1.8,,378.93
+94,2009932044,2026-03-11,2026-03-11 1:39,Live Better Round-up Transfer,Round-up Transfer,Transfer,Transfer,,-0.03,,378.9
+95,2009932044,2026-03-12,2026-03-12 13:58,(Pending) Dl Bolt Cpt (Card 3221),DL Bolt                CPT            ZA|MANUAL,Transport,Other Transport,,-27,,
+96,2009932044,2026-03-13,2026-03-12 9:36,Bultkafee Potchefstroom (Card 3221),S2S*Bultkafee          PotchefstroomZAZA,Food,Groceries,,-32,,346.9
+97,2009932044,2026-03-14,2026-03-12 10:54,Bult Pharmacy Potchefstroom (Card 3221),BULT PHARMACY          POTCHEFSTROOMMNZA,Medical,Pharmacy,,-75.95,,270.95
+98,2009932044,2026-03-14,2026-03-14 9:07,Varsmark 131931 Potchefstroo (Card 3221),000      VARSMARK         131931POTCHEFSTROO NWZA,Food,Groceries,,-58.57,,212.38
+99,2009932044,2026-03-14,2026-03-14 10:11,Banking App External Payment: Josh Jelly,JOSH JELLY,Uncategorised,Uncategorised,,-40,,172.38
+100,2009932044,2026-03-14,2026-03-14 10:11,External Payment Fee,External Payment Fee,Fees,Fees,,,-2,170.38
+101,2009932044,2026-03-15,2026-03-13 19:37,The Big Mouth Sandton (Card 3221),THE BIG MOUTH          SANDTON      ZAZA,Food,Restaurants,,-20,,150.38
+102,2009932044,2026-03-15,2026-03-15 3:43,Live Better Round-up Transfer,Round-up Transfer,Transfer,Transfer,,-1.48,,148.9
+103,2009932044,2026-03-15,2026-03-15 8:03,Payment Received: H Rootman,H ROOTMAN,Other Income,Other Income,300,,,448.9
+104,2009932044,2026-03-16,2026-03-14 9:02,New Heights He Parys (Card 3221),Yoco   *New Heights He Parys        FSZA,Food,Groceries,,-24,,424.9
+105,2009932044,2026-03-16,2026-03-14 17:18,Superspar Potchefstroom (Card 3221),SuperSpar Potchefstroo Potchefstroom  ZA,Food,Groceries,,-44.23,,380.67

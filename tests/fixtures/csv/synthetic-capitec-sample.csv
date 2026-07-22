@@ -1,0 +1,6 @@
+Nr,Account,Posting Date,Transaction Date,Description,Original Description,Parent Category,Category,Money In,Money Out,Fee,Balance
+1,2009932044,2026-04-01,2026-04-01 09:15,Banking App Immediate Payment: Heidi Rootman,HEIDI ROOTMAN,Personal & Family,Digital Payments,500.00,,,2996.17
+2,2009932044,2026-04-02,2026-04-02 14:02,"Card Purchase: Pick n Pay, Cape Town",PICK N PAY CAPE TOWN ZA,Groceries,Supermarkets,,-94.00,,2902.17
+3,2009932044,2026-04-02,2026-04-02 14:05,Immediate Payment Fee,IMMEDIATE PAYMENT FEE,Bank Fees,Fees,,,-1.00,2901.17
+4,2009932044,2026-04-03,2026-04-03 08:00,(Pending) Card Purchase: Food Lover's Market,FOOD LOVERS MARKET,Groceries,Supermarkets,,-48.00,,2853.17
+5,2009932044,2026-04-04,2026-04-04 10:00,Salary,ACME CORP PAYROLL,Income,Salary,"1,234.56",,,4087.73
